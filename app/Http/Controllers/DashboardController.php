@@ -85,7 +85,8 @@ class DashboardController extends Controller
                     'landline' => request('landline'),
                     'address' => request('address'),
                     'user_id' => request('id')
-                ]);
+                ]
+            );
         }
 
         session()->flash('edit_success', 'You have successfully edit an account.'); // Testing flash sessions
@@ -173,6 +174,39 @@ class DashboardController extends Controller
 
             session()->flash('edit_success', 'You have successfully update profile picture.'); // Testing flash sessions
             return redirect('/dashboard');
+        }
+    }
+
+    public function searchEmployee()
+    {
+        $fetch_user_list = DB::table('filipay_users')
+            ->select('*')
+            ->where([
+                ['first_name', 'like', '%' . request('keyword') . '%'],
+                ['gender', 'like', request('gender') . '%']
+            ])
+            // ->where('first_name', 'like', '%' . request('keyword') . '%')
+            // ->orWhere('last_name', 'like', '%' . request('keyword') . '%')
+            // ->where('gender', 'like', '%' . request('gender') . '%')
+            ->orderBy('b_day', request('b_day'))
+            ->get();
+
+        if ($fetch_user_list && count($fetch_user_list) > 0) {
+            foreach ($fetch_user_list as $row) {
+                $user_list[] = array(
+                    'id' => $row->id,
+                    'first_name' => $row->first_name,
+                    'last_name' => $row->last_name,
+                    'profile_picture_path' => $row->profile_picture_path,
+                    'username' => $row->username,
+                    'b_day' => $row->b_day,
+                    'gender' => $row->gender
+                )
+                ;
+            }
+            return view('dashboard_table', ['user_list' => $user_list]);
+        } else {
+            return ("No data was found");
         }
     }
 

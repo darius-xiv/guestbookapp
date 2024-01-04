@@ -29,4 +29,5 @@ Route::post('/delete', 'DashboardController@deleteUser');
 Route::post('/delete_user', 'DashboardController@deleteUserScript');
 Route::post('/preview', 'DashboardController@previewUser');
 Route::post('/update_profile', 'DashboardController@uploadPicture');
+Route::post('/search_employee', 'DashboardController@searchEmployee');
 Route::post('/submit_profile_picture', 'DashboardController@uploadPictureScript');
